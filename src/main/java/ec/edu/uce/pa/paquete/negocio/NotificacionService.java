@@ -1,5 +1,8 @@
 package ec.edu.uce.pa.paquete.negocio;
 
+import jakarta.inject.Singleton;
+
+@Singleton 
 public class NotificacionService {
     public void enviar(String correo, String asunto, String cuerpo) {
         System.out.println("Enviando notificación a: " + correo);
