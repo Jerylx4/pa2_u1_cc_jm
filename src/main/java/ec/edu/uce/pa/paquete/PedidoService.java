@@ -6,7 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 //@ApplicationScoped //delego el control al contenedor ArC
-//@RequestScoped //para aplicaciones web
+//@RequestScoped //para aplicaciones web        
 @Singleton 
 public class PedidoService {
 
