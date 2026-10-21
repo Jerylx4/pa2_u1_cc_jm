@@ -10,8 +10,31 @@ import jakarta.inject.Singleton;
 @Singleton 
 public class PedidoService {
 
+    
+    //injeccion de dependencias por atributo
     @Inject 
-    private MailService mS; //injectamos la clase
+    private MailService mS; 
+    
+
+    /* 
+    //injeccion de dependencias por constructor
+    private MailService mS;
+    @Inject 
+    public PedidoService(MailService mailService){
+        this.mS = mailService;
+    }
+    */
+
+    /* 
+    //injeccion de dependencias por setter
+    private MailService mS;
+    @Inject 
+    public void setmailService(MailService mS) {
+        System.out.println("Se está inyectando el servicio de correo electronico a PedidoService");
+        this.mS = mS;
+    }
+    */
+
 
     public void realizar(Pedido pedido) {
 
