@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 
 @ApplicationScoped //delego el control al contenedor ArC
@@ -11,10 +12,15 @@ import jakarta.inject.Singleton;
 //@Singleton 
 public class PedidoService {
 
-    public void realizar(Pedido pedido) {
+    @Inject 
+    @Named("mail")
+    private Notificacion notificacionCorreo;
 
-        //mediante lookup de la clase MailService
-        MailService mS = CDI.current().select(MailService.class).get();
+    @Inject 
+    @Named("sms")
+    private Notificacion notificacionSMS;
+
+    public void realizar(Pedido pedido) {
 
         System.out.println("Realizando pedido...");
 
@@ -26,10 +32,15 @@ public class PedidoService {
         System.out.println("Pedido realizado con exito.");
 
         String asunto = "Confirmacion de pedido";
-        String correo = "Estimado " + pedido.getCliente() + ", su pedido de " +
+        String cuerpo = "Estimado " + pedido.getCliente() + ", su pedido de " +
                 pedido.getProducto() + " por un total de $" + pedido.getTotal() +
                 " ha sido realizado con exito.";
-        mS.enviar(pedido.getCorreo(), asunto, correo); //this es una buena practica
+
+        //Notificacion del pedido por correo
+        this.notificacionCorreo.enviar(pedido.getCorreo(), cuerpo);
+        
+        //Notificacion del pedido por SMS
+        this.notificacionSMS.enviar(pedido.getTelefono(), cuerpo);
     }
 
 }
