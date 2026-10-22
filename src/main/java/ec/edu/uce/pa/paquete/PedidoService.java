@@ -2,41 +2,19 @@ package ec.edu.uce.pa.paquete;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-//@ApplicationScoped //delego el control al contenedor ArC
+@ApplicationScoped //delego el control al contenedor ArC
 //@RequestScoped //para aplicaciones web        
-@Singleton 
+//@Singleton 
 public class PedidoService {
 
-    
-    //injeccion de dependencias por atributo
-    @Inject 
-    private MailService mS; 
-    
-
-    /* 
-    //injeccion de dependencias por constructor
-    private MailService mS;
-    @Inject 
-    public PedidoService(MailService mailService){
-        this.mS = mailService;
-    }
-    */
-
-    /* 
-    //injeccion de dependencias por setter
-    private MailService mS;
-    @Inject 
-    public void setmailService(MailService mS) {
-        System.out.println("Se está inyectando el servicio de correo electronico a PedidoService");
-        this.mS = mS;
-    }
-    */
-
-
     public void realizar(Pedido pedido) {
+
+        //mediante lookup de la clase MailService
+        MailService mS = CDI.current().select(MailService.class).get();
 
         System.out.println("Realizando pedido...");
 
@@ -51,7 +29,7 @@ public class PedidoService {
         String correo = "Estimado " + pedido.getCliente() + ", su pedido de " +
                 pedido.getProducto() + " por un total de $" + pedido.getTotal() +
                 " ha sido realizado con exito.";
-        this.mS.enviar(pedido.getCorreo(), asunto, correo); //this es una buena practica
+        mS.enviar(pedido.getCorreo(), asunto, correo); //this es una buena practica
     }
 
 }
