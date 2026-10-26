@@ -1,62 +1,26 @@
-# pa2_u1_cc_jm
+# Taller: Simulador de descuentos con quarkus
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+### 1. ¿En qué parte del ejercicio se aplica IoC y en cuál DI?
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+IoC se aplica al delegar por completo al contenedor la gestion del ciclo de vida los componentes (VentaService, DescuentoRegular, DescuentoVIP, Auditoria), no se usa el operador new para instanciar manualmente las clases.
 
-## Running the application in dev mode
+Aplicamos la anotación @Inject sobre las dependencias aplicadas en VentaService y en Main, con esto estamos inyectando las dependencias a usar, unas por atributo y otra por constructor.
 
-You can run your application in dev mode that enables live coding using:
+### 2. ¿Qué función cumplen los Qualifiers y por qué son necesarios?
 
-```shell script
-./mvnw quarkus:dev
-```
+Nos permiten desambiguar multiples implementaciones de una misma interfaz, son necesarios porque cuando existen dos o más clases que implementan la misma interfaz quarkus necesita saber exactamente qué implementación usar.
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+### 3. ¿Cuál es la diferencia entre @ApplicationScoped y @Dependent?
 
-## Packaging and running the application
+@ApplicationScoped garantiza una única instancia compartida para todas las clases que la necesiten durante todo el tiempo de ejecución del sistema.
+@Dependent crea una nueva instancia cada que se inyecta en un objeto y su ciclo de vida está atado estrictamente al objeto donde fue inyectado.
 
-The application can be packaged using:
+### 4. ¿Por qué las instancias @ApplicationScoped pueden reutilizarse entre varias ventas?
 
-```shell script
-./mvnw package
-```
+Porque no almacenan información específica de una venta dentro de sus atributos de clase, al operar únicamente con los datos que reciben por parámetro en sus métodos, una sola instancia en memoria puede procesar múltiples transacciones de ventas sin riesgo de cruzar o perder datos.
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+### 5. ¿Qué sucedería si se elimina el Qualifier de un punto de inyección de CalculadoraDescuento?
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+Fallaría al iniciar la aplicación y lanzaría una excepción AmbiguousResolutionException, esto sucede porque el contenedor encontraría dos implementaciones candidatas válidas en el contexto (DescuentoRegular y DescuentoVIP) para resolver la interfaz CalculadoraDescuento y no sabría cuál de las dos inyectar.
 
-If you want to build an _über-jar_, execute the following command:
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/pa2_u1_cc_jm-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
