@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import ec.edu.uce.pa.paquete.interceptors.Auditoria;
 import ec.edu.uce.pa.paquete.interceptors.MedirTiempo;
+import ec.edu.uce.pa.paquete.interceptors.Notificar;
+import ec.edu.uce.pa.paquete.interceptors.ValidarFactura;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped 
@@ -14,6 +16,8 @@ public class FacturaService {
         System.out.println("[InstanciaFacturaService]: " + id);
     }
 
+    @Notificar 
+    @ValidarFactura 
     @MedirTiempo 
     @Auditoria 
     public void emitirFactura(Factura factura) {

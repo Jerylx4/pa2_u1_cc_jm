@@ -2,13 +2,15 @@ package ec.edu.uce.pa.paquete.interceptors;
 
 import ec.edu.uce.pa.paquete.AuditoriaService;
 import ec.edu.uce.pa.paquete.Factura;
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
 
 @Auditoria 
-@Interceptor 
+@Interceptor
+@Priority(Interceptor.Priority.APPLICATION + 1) 
 public class AuditoriaInterceptor {
 
     @Inject
